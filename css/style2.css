@@ -10,7 +10,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9;
+  background-color: #d4edda; /* Hijau lembut */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,7 +20,7 @@ body {
 
 /* Header */
 header {
-  background-color: #006400; /* Dark green */
+  background-color: #28a745; /* Hijau terang */
   color: white;
   text-align: center;
   padding: 2rem 0;
@@ -56,7 +56,7 @@ form {
 label {
   font-size: 14px;
   font-weight: bold;
-  color: #006400; /* Dark green */
+  color: #28a745; /* Hijau terang */
   display: block;
   margin-bottom: 5px;
 }
@@ -72,14 +72,14 @@ input[type="text"], input[type="email"], input[type="number"], textarea, input[t
 
 /* Input Hover and Focus */
 input:hover, textarea:hover {
-  border-color: #006400; /* Dark green */
-  box-shadow: 0 0 5px rgba(0, 100, 0, 0.2); /* Dark green */
+  border-color: #28a745; /* Hijau terang */
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.2); /* Hijau terang */
 }
 
 input:focus, textarea:focus {
-  border-color: #004d00; /* Darker green */
+  border-color: #155724; /* Hijau gelap */
   outline: none;
-  box-shadow: 0 0 8px rgba(0, 77, 0, 0.3); /* Darker green */
+  box-shadow: 0 0 8px rgba(21, 87, 36, 0.3); /* Hijau gelap */
 }
 
 textarea {
@@ -89,7 +89,7 @@ textarea {
 
 /* Buttons */
 button {
-  background-color: #006400; /* Dark green */
+  background-color: #28a745; /* Hijau terang */
   color: white;
   padding: 10px;
   border: none;
@@ -101,12 +101,12 @@ button {
 }
 
 button:hover {
-  background-color: #004d00; /* Darker green */
+  background-color: #155724; /* Hijau gelap */
   transform: scale(1.05);
 }
 
 button:active {
-  background-color: #003300; /* Darkest green */
+  background-color: #0c3815; /* Hijau paling gelap */
   transform: scale(1);
 }
 
@@ -114,7 +114,7 @@ button:active {
 footer {
   text-align: center;
   padding: 20px 0;
-  background-color: #006400; /* Dark green */
+  background-color: #28a745; /* Hijau terang */
   color: white;
   width: 100%;
   margin-top: 20px;
@@ -150,7 +150,7 @@ footer {
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #006400; /* Dark green */
+  border: 2px solid #28a745; /* Hijau terang */
 }
 
 .username-info {
@@ -162,3 +162,13 @@ footer {
 .username-info p {
   margin: 0;
 }
+
+.profile-img {
+  display: block;
+  width: 100px;
+  height: 100px;
+  object-fit: cover; /* Memastikan gambar pas dalam lingkaran */
+  border-radius: 50%; /* Membuat gambar berbentuk lingkaran */
+  border: 2px solid #ccc; /* Tambahkan border jika diperlukan */
+}
+

@@ -221,25 +221,62 @@
         const result = await response.json();
 
         if (response.ok) {
-          // Tampilkan hasil prediksi
-          uploadBox.innerHTML = `
-            <h3>Prediction Result:</h3>
-            <p><strong>Label:</strong> ${result.prediction}</p>
-            <p><strong>Confidence:</strong> ${(result.confidence * 100).toFixed(2)}%</p>
-          `;
-        } else {
-          throw new Error(result.error || 'Something went wrong');
-        }
-      } catch (error) {
-        // Tampilkan pesan error
-        let errorMessage = 'Error: Failed to fetch';
-        if (error.message) {
-          errorMessage = `Error: ${error.message}`;
-        }
-        uploadBox.innerHTML = `
-          <p style="color: red;">${errorMessage}</p>
-        `;
-      }
+  // Buat elemen segitiga berdasarkan hasil prediksi
+  const prediction = result.prediction.toLowerCase();
+  const triangleColors = {
+    "berbahaya": "red",
+    "non-organik": "yellow",
+    "organik": "green"
+  };
+
+  const triangleColor = triangleColors[prediction] || "gray"; // Default color jika prediksi tidak diketahui
+
+  // Tampilkan hasil prediksi dengan animasi segitiga
+  uploadBox.innerHTML = `
+    <h3>Prediction Result:</h3>
+    <p><strong>${result.prediction}</strong></p>
+    <div class="triangle" style="border-color: transparent transparent ${triangleColor} transparent;"></div>
+  `;
+} else {
+  throw new Error(result.error || 'Something went wrong');
+}
+
+/* Tambahkan CSS untuk segitiga */
+const style = document.createElement("style");
+style.innerHTML = `
+  .triangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 20px 40px 20px;
+    margin: 10px auto;
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+`;
+document.head.appendChild(style);
+
+} catch (error) {
+  // Tampilkan pesan error
+  let errorMessage = 'Error: Failed to fetch';
+  if (error.message) {
+    errorMessage = `Error: ${error.message}`;
+  }
+  uploadBox.innerHTML = `
+    <p style="color: red;">${errorMessage}</p>
+  `;
+}
     }
   });
 </script>

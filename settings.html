@@ -18,10 +18,10 @@
         <form>
             <div class="form-group">
                 <label for="profile-pic">Foto Profil:</label>
-                <input type="file" id="profile-pic" name="profile-pic" onchange="previewProfilePic()">
+                <input type="file" id="profile-pic" name="profile-pic" onchange="previewProfilePic()" accept="image/*">
             </div>
             <div class="profile-info">
-                <img id="profile-img" src="" alt="Foto Profil" class="profile-img" style="display: none;">
+                <img id="profile-img" src="" alt="Foto Profil" class="profile-img" style="display: none; width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;">
                 <button id="change-photo-btn" type="button" onclick="changePhoto()" style="display: none;">Ubah Foto</button>
                 <div class="form-group">
                     <label for="name">Nama:</label>
@@ -54,19 +54,17 @@
             </div>
             <button type="submit">Simpan</button>
             <button type="button" onclick="window.history.back()">Kembali</button>
+<button type="button" onclick="window.location.href='https://byetrash.web.id'">Logout</button>
+
         </form>
 
         <!-- Menu Ikon -->
-        <div class="menu">
-            <a href="dashboard.html" title="Beranda">&#x1F3E0;</a> <!-- Ikon Home -->
-            <a href="#" title="Notifikasi">&#x1F514;</a> <!-- Ikon Bell -->
-            <a href="settings.html" title="Pengaturan">&#9881;</a> <!-- Ikon Settings -->
-        </div>
+       
     </div>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Helty Friends. All Rights Reserved.</p>
+        <p>&copy; 2024 ByeTrash Friends. All Rights Reserved.</p>
     </footer>
 
     <script src="/js/setting.js" type="module"></script>

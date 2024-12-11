@@ -60,3 +60,131 @@ onAuthStateChanged(auth, (user) => {
         console.log("No user is signed in.");
     }
 });
+
+import { setDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+document.querySelector('form').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Mencegah form dari reload halaman
+
+    const user = auth.currentUser;
+    if (!user) {
+        alert("Anda belum login!");
+        return;
+    }
+
+    // Ambil data dari form
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const address = document.getElementById('address').value;
+    const birthPlace = document.getElementById('birth-place').value;
+    const birthDate = document.getElementById('birth-date').value;
+    const age = document.getElementById('age').value;
+
+    // Data yang akan disimpan
+    const userData = {
+        phone: phone,
+        email: email,
+        address: address,
+        birthPlace: birthPlace,
+        birthDate: birthDate,
+        age: parseInt(age),
+    };
+
+    try {
+        // Simpan ke Firestore
+        const docRef = doc(db, "users", user.uid); // Gunakan UID pengguna saat ini sebagai ID dokumen
+        await setDoc(docRef, userData, { merge: true }); // merge: true untuk memperbarui tanpa menimpa data lama
+        alert("Data berhasil disimpan!");
+    } catch (error) {
+        console.error("Error saving data: ", error);
+        alert("Terjadi kesalahan saat menyimpan data.");
+    }
+});
+
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
+
+const storage = getStorage();
+
+document.getElementById('profile-pic').addEventListener('change', async (event) => {
+    const file = event.target.files[0]; // Ambil file yang dipilih
+    if (!file) return;
+
+    const user = auth.currentUser;
+    if (!user) {
+        alert("Anda harus login untuk mengunggah foto.");
+        return;
+    }
+
+    const storageRef = ref(storage, `profilePictures/${user.uid}`); // Path penyimpanan di Storage
+    try {
+        // Upload file ke Firebase Storage
+        await uploadBytes(storageRef, file);
+
+        // Ambil URL file yang diunggah
+        const photoURL = await getDownloadURL(storageRef);
+
+        // Tampilkan gambar di halaman
+        const profileImg = document.getElementById('profile-img');
+        profileImg.src = photoURL;
+        profileImg.style.display = 'block'; // Tampilkan gambar
+        profileImg.style.borderRadius = '50%'; // Buat gambar berbentuk lingkaran
+
+        // Simpan URL foto di Firestore
+        const docRef = doc(db, "users", user.uid);
+        await setDoc(docRef, { photoURL: photoURL }, { merge: true });
+
+        alert("Foto profil berhasil diunggah dan disimpan!");
+    } catch (error) {
+        console.error("Error uploading file: ", error);
+        alert("Gagal mengunggah foto profil.");
+    }
+});
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        const docRef = doc(db, "users", user.uid);
+
+        // Ambil data pengguna dari Firestore
+        getDoc(docRef).then((docSnap) => {
+            if (docSnap.exists()) {
+                const userData = docSnap.data();
+
+                // Isi kolom formulir dengan data Firestore
+                document.getElementById('name').innerText = `${userData.firstName || ''} ${userData.lastName || ''}`;
+                document.getElementById('phone').value = userData.phone || '';
+                document.getElementById('email').value = userData.email || '';
+                document.getElementById('address').value = userData.address || '';
+                document.getElementById('birth-place').value = userData.birthPlace || '';
+                document.getElementById('birth-date').value = userData.birthDate || '';
+                document.getElementById('age').value = userData.age || '';
+
+                // Tampilkan foto profil dari URL di Firestore
+                if (userData.photoURL) {
+                    const profileImg = document.getElementById('profile-img');
+                    profileImg.src = userData.photoURL;
+                    profileImg.style.display = 'block'; // Tampilkan gambar
+                    profileImg.style.borderRadius = '50%'; // Lingkaran
+                }
+            }
+        }).catch((error) => {
+            console.error("Error getting document:", error);
+        });
+
+        // Ambil URL foto dari Firebase Storage jika belum ada di Firestore
+        const storageRef = ref(storage, `profilePictures/${user.uid}`);
+        getDownloadURL(storageRef).then((url) => {
+            const profileImg = document.getElementById('profile-img');
+            profileImg.src = url;
+            profileImg.style.display = 'block';
+            profileImg.style.borderRadius = '50%';
+
+            // Simpan URL ke Firestore jika belum tersimpan
+            const docRef = doc(db, "users", user.uid);
+            setDoc(docRef, { photoURL: url }, { merge: true });
+        }).catch((error) => {
+            console.error("Error getting profile picture URL:", error);
+        });
+    } else {
+        console.log("No user is signed in.");
+    }
+});
